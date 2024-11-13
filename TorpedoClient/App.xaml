@@ -4,9 +4,10 @@
              xmlns:local="clr-namespace:TorpedoClient"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Style TargetType="Label" x:Name="Header">
+        <Style TargetType="Label" x:Key="Header">
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="DemiBold" />
         </Style>
     </Application.Resources>
 </Application>

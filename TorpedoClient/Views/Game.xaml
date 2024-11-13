@@ -8,7 +8,19 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Game"
       Background="Gray">
-    <Grid>
-        <Label Content="Állapot text"/>
-    </Grid>
+    <DockPanel>
+        <Label Style="{StaticResource Header}" Content="Állapot text" DockPanel.Dock="Top"/>
+
+        <Grid DockPanel.Dock="Left">
+            <Label Style="{StaticResource Header}" Content="Ide jönnek a hajó képek"/>
+        </Grid>
+
+        <Grid DockPanel.Dock="Right">
+            <Label Style="{StaticResource Header}" Content="Ide jön a grid"/>
+        </Grid>
+
+        <Grid DockPanel.Dock="Bottom">
+            <Label Style="{StaticResource Header}" Content="Gombok"/>
+        </Grid>
+    </DockPanel>
 </Page>
