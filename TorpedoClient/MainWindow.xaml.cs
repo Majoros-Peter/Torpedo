@@ -16,9 +16,22 @@ namespace TorpedoClient
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Page CurrentView { get; set; } = default!;
+        public static MainWindow Instance { get; private set; } = default!;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = this;
+            Instance = this;
+        }
+
+        public static void ChangeView(Page page)
+        {
+            Instance.DataContext = null;
+            Instance.CurrentView = page;
+            Instance.DataContext = Instance;
         }
     }
 }

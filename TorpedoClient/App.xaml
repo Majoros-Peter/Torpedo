@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:TorpedoClient"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Label" x:Name="Header">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
     </Application.Resources>
 </Application>
