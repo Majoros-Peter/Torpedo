@@ -11,6 +11,8 @@ namespace TorpedoCommon
     {
         public abstract string Type { get; }
 
+        public BaseMessage() { }
+
         public abstract string ToJson();
 
         public ArraySegment<byte> ToArraySegment()

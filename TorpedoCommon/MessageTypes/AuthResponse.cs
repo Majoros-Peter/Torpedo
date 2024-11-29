@@ -2,24 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TorpedoCommon.MessageTypes
 {
-    public class LoginRequest : BaseMessage
+    public class AuthResponse: BaseMessage
     {
-        public override string Type => "LoginRequest";
+        public override string Type => "AuthResponse";
 
-        public LoginRequest() { }
+        public AuthResponse() { }
 
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public bool Success { get; set; }
 
         public override string ToJson()
         {
             return Serialize(this);
         }
-        
     }
 }

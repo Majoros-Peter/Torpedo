@@ -18,7 +18,7 @@ namespace TorpedoClient
         {
             client = new();
             await client.ConnectAsync(new Uri("ws://localhost:5118"), CancellationToken.None);
-            await RecieveMessages();
+            RecieveMessages();
         }
 
         public async Task SendMessage(BaseMessage message)
@@ -34,10 +34,12 @@ namespace TorpedoClient
                 WebSocketReceiveResult result = await client.ReceiveAsync(buffer, CancellationToken.None);
                 string json = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
 
-                BaseMessage? message = JsonSerializer.Deserialize<BaseMessage>(json);
+                var options = new JsonSerializerOptions();
+                options.Converters.Add(new MessageConverter());
+                BaseMessage? message = JsonSerializer.Deserialize<BaseMessage>(json, options);
                 if (message != null)
                 {
-                    MessageBox.Show(message.Type);
+                    MessageBox.Show(message.GetType().ToString());
                 }
             }
         }
