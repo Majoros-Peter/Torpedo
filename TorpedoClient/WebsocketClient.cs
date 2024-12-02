@@ -7,12 +7,17 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using TorpedoCommon;
+using TorpedoCommon.MessageTypes;
 
 namespace TorpedoClient
 {
     class WebsocketClient
     {
         ClientWebSocket client;
+
+        public event Action<List<string>> onPlayerListRecieved;
+        public event Action<string> onActionFailed;
+        public event Action<GameStateUpdate> onGameStateUpdated;
 
         public async Task Connect()
         {
@@ -36,10 +41,24 @@ namespace TorpedoClient
 
                 var options = new JsonSerializerOptions();
                 options.Converters.Add(new MessageConverter());
-                BaseMessage? message = JsonSerializer.Deserialize<BaseMessage>(json, options);
-                if (message != null)
+                BaseMessage message = JsonSerializer.Deserialize<BaseMessage>(json, options)!;
+
+                switch (message.Type)
                 {
-                    MessageBox.Show(message.GetType().ToString());
+                    case "PlayerListResponse":
+                        PlayerListResponse playerListResponse = message as PlayerListResponse;
+                        onPlayerListRecieved(playerListResponse.players);
+                        break;
+                    case "FailedResponse":
+                        FailedResponse failedResponse = message as FailedResponse;
+                        onActionFailed(failedResponse.Message);
+                        break;
+                    case "GameStateUpdate":
+                        GameStateUpdate update = message as GameStateUpdate;
+                        onGameStateUpdated(update);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

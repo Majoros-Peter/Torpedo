@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace TorpedoCommon.MessageTypes
 {
-    public class AuthResponse: BaseMessage
+    public class PlayerListResponse : BaseMessage
     {
-        public override string Type => "AuthResponse";
+        public override string Type => "PlayerListResponse";
 
-        public AuthResponse() { }
+        public PlayerListResponse() { }
 
-        public bool Success { get; set; }
+        public List<string> players { get; set; }
 
         public override string ToJson()
         {

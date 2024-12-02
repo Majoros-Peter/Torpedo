@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace TorpedoCommon.MessageTypes
 {
-    public class LoginRequest : BaseMessage
+    public class FailedResponse : BaseMessage
     {
-        public override string Type => "LoginRequest";
+        public override string Type => "FailedResponse";
 
-        public LoginRequest() { }
+        public FailedResponse() { }
 
-        public string Username { get; set; }
+        public string Message { get; set; }
 
         public override string ToJson()
         {
             return Serialize(this);
         }
-        
     }
 }

@@ -30,7 +30,8 @@ namespace TorpedoClient
         public async Task Connect() {
             client = new();
             await client.Connect();
-            await client.SendMessage(new LoginRequest() { Username = "test", Password = "asdasd"});
+            await client.SendMessage(new LoginRequest() { Username = new Random().NextInt64().ToString()});
+            client.onPlayerListRecieved += (list => MessageBox.Show(String.Join(" ", list)));
         }
     }
 }

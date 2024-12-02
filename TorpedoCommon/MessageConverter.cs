@@ -24,8 +24,14 @@ namespace TorpedoCommon
                 {
                     case "LoginRequest":
                         return JsonSerializer.Deserialize<LoginRequest>(root.GetRawText());
-                    case "AuthResponse":
-                        return JsonSerializer.Deserialize<AuthResponse>(root.GetRawText());
+                    case "PlayerListResponse":
+                        return JsonSerializer.Deserialize<PlayerListResponse>(root.GetRawText());
+                    case "FailedResponse":
+                        return JsonSerializer.Deserialize<FailedResponse>(root.GetRawText());
+                    case "StartGameMessage":
+                        return JsonSerializer.Deserialize<StartGameMessage>(root.GetRawText());
+                    case "GameStateUpdate":
+                        return JsonSerializer.Deserialize<GameStateUpdate>(root.GetRawText());
                     default:
                         throw new JsonException("Unknown message type");
                 }
