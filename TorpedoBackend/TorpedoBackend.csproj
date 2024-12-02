@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\TorpedoCommon\TorpedoCommon.csproj" />
   </ItemGroup>
 
 </Project>
