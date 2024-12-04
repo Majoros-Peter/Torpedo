@@ -20,6 +20,7 @@ namespace TorpedoBackend
 
 
             app.MapControllers();
+            app.UseWebSockets();
 
             app.Run();
         }
