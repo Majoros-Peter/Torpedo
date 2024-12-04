@@ -21,7 +21,7 @@ namespace TorpedoClient
     public partial class MainWindow : Window
     {
 
-        public Page CurrentView { get; set; } = new Game();
+        public Page CurrentView { get; set; } = new Views.Connect();
         public static MainWindow Instance { get; private set; } = default!;
       
         WebsocketClient client;
@@ -32,8 +32,6 @@ namespace TorpedoClient
 
             DataContext = this;
             Instance = this;
-  
-            Connect();
         }
 
         public static void ChangeView(Page page)
@@ -43,11 +41,20 @@ namespace TorpedoClient
             Instance.DataContext = Instance;
         }
 
-        public async Task Connect() {
+        public async Task Connect(string username) {
             client = new();
-            await client.Connect();
-            await client.SendMessage(new LoginRequest() { Username = new Random().NextInt64().ToString()});
-            client.onPlayerListRecieved += (list => MessageBox.Show(String.Join(" ", list)));
+            ChangeView(new Lobby(client));
+            await client.Connect(username);
+
+            client.onGameStateUpdated += OnGameStateUpdated;
+        }
+
+        private void OnGameStateUpdated(GameStateUpdate game)
+        {
+            if (CurrentView is not Views.Game)
+            {
+                ChangeView(new Views.Game());
+            }
         }
     }
 }

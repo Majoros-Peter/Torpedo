@@ -11,18 +11,21 @@ using TorpedoCommon.MessageTypes;
 
 namespace TorpedoClient
 {
-    class WebsocketClient
+    public class WebsocketClient
     {
         ClientWebSocket client;
+        public string Username { get; set; }
 
         public event Action<List<string>> onPlayerListRecieved;
         public event Action<string> onActionFailed;
         public event Action<GameStateUpdate> onGameStateUpdated;
 
-        public async Task Connect()
+        public async Task Connect(string username)
         {
             client = new();
             await client.ConnectAsync(new Uri("ws://localhost:5118"), CancellationToken.None);
+            this.Username = username;
+            await SendMessage(new LoginRequest() { Username = username });
             RecieveMessages();
         }
 
