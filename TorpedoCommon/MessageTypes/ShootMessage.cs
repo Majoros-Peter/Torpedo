@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace TorpedoCommon.MessageTypes
 {
-    public class GameStateUpdate : BaseMessage
+    public class ShootMessage : BaseMessage
     {
-        public GameStateUpdate() { }
+        public ShootMessage() { }
 
-        public Game GameState { get; set; }
+        public int GameId { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public override string ToJson()
         {

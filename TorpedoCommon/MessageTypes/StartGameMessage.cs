@@ -8,8 +8,6 @@ namespace TorpedoCommon.MessageTypes
 {
     public class StartGameMessage : BaseMessage
     {
-        public override string Type => "StartGameMessage";
-
         public StartGameMessage() { }
 
         public string Player2Name { get; set; }
