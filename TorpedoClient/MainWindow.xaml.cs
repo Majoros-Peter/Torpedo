@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TorpedoClient.Views;
 using TorpedoCommon;
 using TorpedoCommon.MessageTypes;
 
@@ -19,12 +20,27 @@ namespace TorpedoClient
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public Page CurrentView { get; set; } = new Game();
+        public static MainWindow Instance { get; private set; } = default!;
+      
         WebsocketClient client;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = this;
+            Instance = this;
+  
             Connect();
+        }
+
+        public static void ChangeView(Page page)
+        {
+            Instance.DataContext = null;
+            Instance.CurrentView = page;
+            Instance.DataContext = Instance;
         }
 
         public async Task Connect() {
