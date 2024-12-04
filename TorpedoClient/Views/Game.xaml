@@ -12,7 +12,21 @@
         <Label Style="{StaticResource Header}" Content="Állapot text" DockPanel.Dock="Top"/>
 
         <Grid DockPanel.Dock="Left">
-            <Label Style="{StaticResource Header}" Content="Ide jönnek a hajó képek"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Rectangle Fill="Orange" Grid.RowSpan="5" Width="50"/>
         </Grid>
 
         <Grid DockPanel.Dock="Right">

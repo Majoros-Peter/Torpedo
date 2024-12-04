@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TorpedoClient.Views;
 
 namespace TorpedoClient
 {
@@ -16,7 +17,7 @@ namespace TorpedoClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Page CurrentView { get; set; } = default!;
+        public Page CurrentView { get; set; } = new Game();
         public static MainWindow Instance { get; private set; } = default!;
 
         public MainWindow()
