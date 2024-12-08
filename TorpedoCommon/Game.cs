@@ -18,6 +18,9 @@ namespace TorpedoCommon
         public bool SetupPhase { get; set; } = true;
         public bool isPlayer1Next { get; set; } = true;
 
+        public List<Tuple<int, int>> Player1Ships { get; set; }
+        public List<Tuple<int, int>> Player2Ships { get; set; }
+
         public bool[] Player1Shots { get ; set; } = new bool[BOARD_SIZE * BOARD_SIZE];
         public bool[] Player2Shots { get; set; } = new bool[BOARD_SIZE * BOARD_SIZE];
     }

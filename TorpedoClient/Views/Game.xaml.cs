@@ -6,11 +6,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Threading;
+using System.Text.Json.Serialization;
+using TorpedoCommon.MessageTypes;
 
 namespace TorpedoClient.Views
 {
     public partial class Game : Page
     {
+        private WebsocketClient _client;
+        private TorpedoCommon.Game game;
+        private bool inSetup = true;
+
         private string? _selectedShip;
         private readonly int[,] _gridState = new int[10, 10]; // 0 = empty, 1 = occupied
         private List<Border> highlightedBorders = new List<Border>();
@@ -27,8 +33,11 @@ namespace TorpedoClient.Views
         private bool _isVerticalPlacement = false; // Track if ship is placed vertically or horizontally
         private HashSet<string> placedShipTypes = new HashSet<string>(); // Track placed ship types
 
-        public Game()
+        public Game(WebsocketClient client, TorpedoCommon.Game game)
         {
+            _client = client;
+           this.game = game;
+
             InitializeComponent();
 
             // Initialize the grid
@@ -59,6 +68,22 @@ namespace TorpedoClient.Views
             Grid.SetColumn(readyButton, 5);  // Adjust column to match the original "Gombok" label position
             Grid.SetRow(readyButton, 11);    // Adjust row to match the original "Gombok" label position
             grid.Children.Add(readyButton);
+
+            _client.onGameStateUpdated += (GameStateUpdate update) =>
+            {
+                this.game = update.GameState;
+                if (inSetup && !this.game.SetupPhase) {
+                    inSetup = false;
+                    MessageBox.Show("GAME STARTED");
+                    //TODO: Switch to shooting screen
+                }
+            };
+
+            readyButton.Click += (_, _) =>
+            {
+                //TODO: check if all ships are placed
+                client.SendMessage(new PlaceShipsMessage() { GameId = this.game.Id, Ships = placedShips });
+            };
         }
 
         // Handle ship button click to select ship type

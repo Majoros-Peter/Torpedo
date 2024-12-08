@@ -53,7 +53,7 @@ namespace TorpedoClient
         {
             if (CurrentView is not Views.Game)
             {
-                ChangeView(new Views.Game());
+                ChangeView(new Views.Game(client, game.GameState));
             }
         }
     }

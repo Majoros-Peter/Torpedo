@@ -56,18 +56,27 @@ namespace TorpedoBackend.Controllers
                                     PlaceShipsMessage placeShipsMessage = message as PlaceShipsMessage;
                                     Game placeShipsGame = games.Find(x => x.Id == placeShipsMessage.GameId)!;
 
-                                    //todo: save ships
-                                    //todo: check if both players done
-                                    placeShipsGame.SetupPhase = false;
-                                    await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });
+                                    if (placeShipsGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key)
+                                    {
+                                        placeShipsGame.Player1Ships = placeShipsMessage.Ships;
+                                    }
+                                    else
+                                    {
+                                        placeShipsGame.Player2Ships = placeShipsMessage.Ships;
+                                    }
+
+
+                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships.Count != null)
+                                    {
+                                        placeShipsGame.SetupPhase = false;
+                                        await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });
+                                    }
                                     break;
                                 case "ShootMessage":
                                     ShootMessage shootMessage = message as ShootMessage;
                                     Game shootGame = games.Find(x => x.Id == shootMessage.GameId)!;
 
-                                    bool player1 = shootGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key;
-
-                                    if (player1)
+                                    if (shootGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key)
                                     {
                                         shootGame.Player1Shots[shootMessage.X * 1 + shootMessage.Y] = true;
                                         shootGame.isPlayer1Next = false;

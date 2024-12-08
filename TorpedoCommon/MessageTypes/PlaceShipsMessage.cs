@@ -11,6 +11,7 @@ namespace TorpedoCommon.MessageTypes
         public PlaceShipsMessage() { }
 
         public int GameId { get; set; }
+        public List<Tuple<int, int>> Ships { get; set; }
 
         public override string ToJson()
         {
