@@ -23,12 +23,19 @@ namespace TorpedoClient.Views
     {
         WebsocketClient client;
 
-        public Lobby(WebsocketClient client)
+        public Lobby(WebsocketClient client) : this(client, []) {}
+
+        public Lobby(WebsocketClient client, List<string> initList)
         {
             InitializeComponent();
             this.client = client;
 
-            client.onPlayerListRecieved += (list => lbPlayers.ItemsSource = list.Where(x => x != client.Username));
+            UpdateList(initList);
+            client.onPlayerListRecieved += (list => UpdateList(list));
+        }
+
+        private void UpdateList(List<string> list) {
+            lbPlayers.ItemsSource = list.Where(x => x != client.Username);
         }
 
         private async void btnInvite_Click(object sender, RoutedEventArgs e)

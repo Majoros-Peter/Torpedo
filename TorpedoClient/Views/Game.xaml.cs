@@ -59,6 +59,7 @@ namespace TorpedoClient.Views
             }
 
             // Create "Ready" button and place it where the "Gombok" label was
+            // TODO: ready gomb kilóg a képernyőről
             Button readyButton = new Button
             {
                 Content = "Ready",
@@ -68,6 +69,15 @@ namespace TorpedoClient.Views
             Grid.SetColumn(readyButton, 5);  // Adjust column to match the original "Gombok" label position
             Grid.SetRow(readyButton, 11);    // Adjust row to match the original "Gombok" label position
             grid.Children.Add(readyButton);
+
+            _client.onPlayerListRecieved += (List<string> players) =>
+            {
+                if (!players.Contains(game.Player1Name) || !players.Contains(game.Player2Name))
+                {
+                    MainWindow.ChangeView(new Views.Lobby(client, players));
+                    MessageBox.Show("Other player disconnected!");
+                }
+            };
 
             _client.onGameStateUpdated += (GameStateUpdate update) =>
             {
@@ -83,6 +93,8 @@ namespace TorpedoClient.Views
             {
                 //TODO: check if all ships are placed
                 client.SendMessage(new PlaceShipsMessage() { GameId = this.game.Id, Ships = placedShips });
+                readyButton.IsEnabled = false;
+                lblStatus.Content = "Waiting for other player...";
             };
         }
 

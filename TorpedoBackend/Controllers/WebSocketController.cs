@@ -39,11 +39,23 @@ namespace TorpedoBackend.Controllers
                             {
                                 case "LoginRequest":
                                     LoginRequest loginRequest = message as LoginRequest;
+
+                                    if (players.ContainsKey(loginRequest.Username)) {
+                                        await SendMessage(websocket, new FailedResponse() { Message = "This username is taken!" });
+                                        break;
+                                    }
+
                                     players[loginRequest.Username] = websocket;
                                     await BroadcastMessage(new PlayerListResponse() { players = [.. players.Keys] });
                                     break;
                                 case "StartGameMessage":
                                     StartGameMessage startGameMessage = message as StartGameMessage;
+
+                                    if (games.Any(x => x.Player1Name == startGameMessage.Player2Name || x.Player2Name == startGameMessage.Player2Name))
+                                    {
+                                        await SendMessage(websocket, new FailedResponse() { Message = "Player is already in a game!" });
+                                        break;
+                                    }
 
                                     Game newGame = new Game() { Id = random.Next(),
                                         Player1Name = players.Where(pair => pair.Value == websocket).First().Key,
@@ -66,7 +78,7 @@ namespace TorpedoBackend.Controllers
                                     }
 
 
-                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships.Count != null)
+                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships != null)
                                     {
                                         placeShipsGame.SetupPhase = false;
                                         await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });

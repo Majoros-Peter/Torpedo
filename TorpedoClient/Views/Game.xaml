@@ -5,7 +5,7 @@
       Background="Gray">
     <DockPanel>
         <!-- Header displaying game status -->
-        <Label Style="{StaticResource Header}" Content="Állapot text" DockPanel.Dock="Top"/>
+        <Label x:Name="lblStatus" Style="{StaticResource Header}" Content="Állapot text" DockPanel.Dock="Top"/>
 
         <!-- Game control buttons -->
         <Grid DockPanel.Dock="Bottom" Height="50">
