@@ -134,6 +134,9 @@ namespace TorpedoClient.Views
                     .IsEnabled = false;
                 _selectedShip = null;
             }
+
+            if(placedShipTypes.Count == ShipLength.Count)
+                ReadyBtn.IsEnabled = true;
         }
 
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -313,6 +316,11 @@ namespace TorpedoClient.Views
                 }
             }
             return true;
+        }
+
+        private void ReadyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Ready");
         }
     }
 }
