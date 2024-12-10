@@ -34,6 +34,8 @@ namespace TorpedoCommon
                         return JsonSerializer.Deserialize<PlaceShipsMessage>(root.GetRawText());
                     case "ShootMessage":
                         return JsonSerializer.Deserialize<ShootMessage>(root.GetRawText());
+                    case "GameOver":
+                        return JsonSerializer.Deserialize<GameOver>(root.GetRawText());
                     default:
                         throw new JsonException("Unknown message type");
                 }

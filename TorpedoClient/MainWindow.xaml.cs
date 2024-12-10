@@ -59,7 +59,7 @@ namespace TorpedoClient
 
         private void OnGameStateUpdated(GameStateUpdate game)
         {
-            if (CurrentView is not Views.Game)
+            if (CurrentView is not Views.Game and not SlightlyMoreInterestingGame)
             {
                 ChangeView(new Views.Game(client, game.GameState));
             }
