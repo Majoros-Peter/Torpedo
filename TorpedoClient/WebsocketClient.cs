@@ -19,7 +19,7 @@ namespace TorpedoClient
         public event Action<List<string>> onPlayerListRecieved;
         public event Action<string> onActionFailed;
         public event Action<GameStateUpdate> onGameStateUpdated;
-        public event Action startRejected;
+        public event Action<string> onGameOver;
 
         public async Task Connect(string username)
         {
@@ -60,6 +60,10 @@ namespace TorpedoClient
                     case "GameStateUpdate":
                         GameStateUpdate update = message as GameStateUpdate;
                         onGameStateUpdated(update);
+                        break;
+                    case "GameOver":
+                        GameOver gameOver = message as GameOver;
+                        onGameOver(gameOver.Winner);
                         break;
                     default:
                         break;

@@ -58,17 +58,7 @@ namespace TorpedoClient.Views
                 }
             }
 
-            // Create "Ready" button and place it where the "Gombok" label was
-            // TODO: ready gomb kilóg a képernyőről
-            Button readyButton = new Button
-            {
-                Content = "Ready",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-            };
-            Grid.SetColumn(readyButton, 5);  // Adjust column to match the original "Gombok" label position
-            Grid.SetRow(readyButton, 11);    // Adjust row to match the original "Gombok" label position
-            grid.Children.Add(readyButton);
+            lblStatus.Content = "Place your ships";
 
             _client.onPlayerListRecieved += (List<string> players) =>
             {
@@ -84,17 +74,8 @@ namespace TorpedoClient.Views
                 this.game = update.GameState;
                 if (inSetup && !this.game.SetupPhase) {
                     inSetup = false;
-                    MessageBox.Show("GAME STARTED");
-                    //TODO: Switch to shooting screen
+                    MainWindow.ChangeView(new SlightlyMoreInterestingGame(_client, this.game));
                 }
-            };
-
-            readyButton.Click += (_, _) =>
-            {
-                //TODO: check if all ships are placed
-                client.SendMessage(new PlaceShipsMessage() { GameId = this.game.Id, Ships = placedShips });
-                readyButton.IsEnabled = false;
-                lblStatus.Content = "Waiting for other player...";
             };
         }
 
@@ -269,14 +250,14 @@ namespace TorpedoClient.Views
                     _gridState[checkRow, checkColumn] = 1;
 
                     // Add the cell to the list of ship cells
-                    shipCells.Add(new Tuple<int, int>(checkRow, checkColumn));
+                    shipCells.Add(new Tuple<int, int>(checkColumn, checkRow));
                 }
 
                 // Color the cells grey after placing the ship
                 foreach (var cell in shipCells)
                 {
-                    int rowIndex = cell.Item1;
-                    int columnIndex = cell.Item2;
+                    int rowIndex = cell.Item2;
+                    int columnIndex = cell.Item1;
 
                     Border border = grid.Children
                         .Cast<UIElement>()
@@ -320,7 +301,9 @@ namespace TorpedoClient.Views
 
         private void ReadyBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Ready");
+            _client.SendMessage(new PlaceShipsMessage() { GameId = this.game.Id, Ships = placedShips });
+            ReadyBtn.IsEnabled = false;
+            lblStatus.Content = "Waiting for other player...";
         }
     }
 }

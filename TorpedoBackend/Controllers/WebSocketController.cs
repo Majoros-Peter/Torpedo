@@ -78,7 +78,7 @@ namespace TorpedoBackend.Controllers
                                     }
 
 
-                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships != null)
+                                    if (placeShipsGame.Player1Ships.Any() && placeShipsGame.Player2Ships.Any())
                                     {
                                         placeShipsGame.SetupPhase = false;
                                         await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });
@@ -90,15 +90,31 @@ namespace TorpedoBackend.Controllers
 
                                     if (shootGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key)
                                     {
-                                        shootGame.Player1Shots[shootMessage.X * 1 + shootMessage.Y] = true;
+                                        shootGame.Player1Shots.Add(new(shootMessage.X, shootMessage.Y));
                                         shootGame.isPlayer1Next = false;
                                     }
                                     else {
-                                        shootGame.Player2Shots[shootMessage.X * 1 + shootMessage.Y] = true;
+                                        shootGame.Player2Shots.Add(new(shootMessage.X, shootMessage.Y));
                                         shootGame.isPlayer1Next = true;
                                     }
-                                    
-                                    await SendToPlayers(shootGame, new GameStateUpdate { GameState = shootGame });
+
+                                    if (!shootGame.Player1Ships.Except(shootGame.Player2Shots).Any())
+                                    {
+                                        await SendToPlayers(shootGame, new GameOver() { Winner = shootGame.Player2Name });
+                                        games.Remove(shootGame);
+                                        await BroadcastMessage(new PlayerListResponse() { players = [.. players.Keys] });
+                                    }
+                                    else if (!shootGame.Player2Ships.Except(shootGame.Player1Shots).Any())
+                                    {
+                                        await SendToPlayers(shootGame, new GameOver() { Winner = shootGame.Player1Name });
+                                        games.Remove(shootGame);
+                                        await BroadcastMessage(new PlayerListResponse() { players = [.. players.Keys] });
+                                    }
+                                    else
+                                    {
+                                        await SendToPlayers(shootGame, new GameStateUpdate { GameState = shootGame });
+                                    }
+
                                     break;
                                 default:
                                     break;
@@ -108,7 +124,10 @@ namespace TorpedoBackend.Controllers
                 }
                 catch (WebSocketException)
                 {
-                    players.Remove(players.Where(pair => pair.Value == websocket).First().Key);
+                    string username = players.Where(pair => pair.Value == websocket).First().Key;
+
+                    games.Where(x => x.Player1Name == username || x.Player2Name == username).ToList().ForEach(x => games.Remove(x));
+                    players.Remove(username);
                     await BroadcastMessage(new PlayerListResponse() { players = [.. players.Keys] });
                 }
             }

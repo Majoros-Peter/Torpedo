@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TorpedoClient"
         mc:Ignorable="d"
-        Title="MainWindow" Width="900" Height="520">
+        Title="MainWindow" Width="900" Height="550">
     <Grid>
         <Frame Content="{Binding CurrentView}" NavigationUIVisibility="Hidden"/>
     </Grid>
