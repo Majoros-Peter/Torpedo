@@ -9,7 +9,7 @@
 
         <!-- Game control buttons -->
         <Grid DockPanel.Dock="Bottom" Height="50">
-            <!--<Button Content="Ready" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ReadyButton_Click" Width="200" Height="30"/>-->
+            <Button x:Name="ReadyBtn" Content="Ready" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ReadyBtn_Click" Width="200" Height="30"/>
         </Grid>
 
         <!-- Game board grid (10x10) -->
