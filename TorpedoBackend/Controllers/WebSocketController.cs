@@ -66,7 +66,7 @@ namespace TorpedoBackend.Controllers
                                     }
 
 
-                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships.Count != null)
+                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships != null)
                                     {
                                         placeShipsGame.SetupPhase = false;
                                         await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });
