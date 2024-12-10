@@ -19,6 +19,7 @@ namespace TorpedoClient
         public event Action<List<string>> onPlayerListRecieved;
         public event Action<string> onActionFailed;
         public event Action<GameStateUpdate> onGameStateUpdated;
+        public event Action startRejected;
 
         public async Task Connect(string username)
         {

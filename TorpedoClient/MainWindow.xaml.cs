@@ -43,10 +43,18 @@ namespace TorpedoClient
 
         public async Task Connect(string username) {
             client = new();
-            ChangeView(new Lobby(client));
-            await client.Connect(username);
+            
+            client.Connect(username);
 
             client.onGameStateUpdated += OnGameStateUpdated;
+            client.onActionFailed += (string message) => MessageBox.Show(message);
+            client.onPlayerListRecieved += (List<string> list) =>
+            {
+                if (CurrentView is Views.Connect)
+                {
+                    ChangeView(new Lobby(client, list));
+                }
+            };
         }
 
         private void OnGameStateUpdated(GameStateUpdate game)

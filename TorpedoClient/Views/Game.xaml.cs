@@ -70,6 +70,15 @@ namespace TorpedoClient.Views
             Grid.SetRow(readyButton, 11);    // Adjust row to match the original "Gombok" label position
             grid.Children.Add(readyButton);
 
+            _client.onPlayerListRecieved += (List<string> players) =>
+            {
+                if (!players.Contains(game.Player1Name) || !players.Contains(game.Player2Name))
+                {
+                    MainWindow.ChangeView(new Views.Lobby(client, players));
+                    MessageBox.Show("Other player disconnected!");
+                }
+            };
+
             _client.onGameStateUpdated += (GameStateUpdate update) =>
             {
                 this.game = update.GameState;
