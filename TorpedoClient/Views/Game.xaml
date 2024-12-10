@@ -1,40 +1,62 @@
 ﻿<Page x:Class="TorpedoClient.Views.Game"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:TorpedoClient.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Title="Game"
       Background="Gray">
     <DockPanel>
+        <!-- Header displaying game status -->
         <Label Style="{StaticResource Header}" Content="Állapot text" DockPanel.Dock="Top"/>
 
-        <Grid DockPanel.Dock="Left">
+        <!-- Game control buttons -->
+        <Grid DockPanel.Dock="Bottom" Height="50">
+            <!--<Button Content="Ready" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ReadyButton_Click" Width="200" Height="30"/>-->
+        </Grid>
+
+        <!-- Game board grid (10x10) -->
+        <Grid x:Name="grid" DockPanel.Dock="Right" Background="White" Width="400" Height="400"
+              MouseLeftButtonUp="Grid_MouseLeftButtonUp"
+              MouseMove="Grid_MouseMove"
+              MouseRightButtonUp="Grid_MouseRightButtonUp">
+            <!-- Right-click event handler -->
+            <!-- Added right-click event -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            
-            <Rectangle Fill="Orange" Grid.RowSpan="5" Width="50"/>
         </Grid>
 
-        <Grid DockPanel.Dock="Right">
-            <Label Style="{StaticResource Header}" Content="Ide jön a grid"/>
-        </Grid>
+        <!-- Ship selection and feedback -->
+        <StackPanel DockPanel.Dock="Left" Height="250" Width="300" x:Name="shipSelectionPanel">
+            <!-- Ship selection buttons -->
+            <Button Margin="3" Click="ShipButton_Click" Tag="Aircraft Carrier" Content="Aircraft Carrier" />
+            <Button Margin="3" Click="ShipButton_Click" Tag="Battleship" Content="Battleship" />
+            <Button Margin="3" Click="ShipButton_Click" Tag="Submarine" Content="Submarine"/>
+            <Button Margin="3" Click="ShipButton_Click" Tag="Cruiser" Content="Cruiser"/>
+            <Button Margin="3" Click="ShipButton_Click" Tag="Destroyer" Content="Destroyer"/>
 
-        <Grid DockPanel.Dock="Bottom">
-            <Label Style="{StaticResource Header}" Content="Gombok"/>
-        </Grid>
+            <!-- Selected ship and rotation display -->
+            <Label Name="SelectedShipLabel" Content="Selected ship: None" Margin="10"/>
+            <Label Name="RotationLabel" Content="Current Orientation: Horizontal" Margin="10"/>
+        </StackPanel>
     </DockPanel>
 </Page>

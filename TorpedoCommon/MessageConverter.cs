@@ -18,8 +18,6 @@ namespace TorpedoCommon
                 var root = doc.RootElement;
                 var type = root.GetProperty("Type").GetString();
 
-                Type asd = Type.GetType($"TorpedoCommon.{type}");
-
                 switch (type)
                 {
                     case "LoginRequest":
@@ -32,6 +30,10 @@ namespace TorpedoCommon
                         return JsonSerializer.Deserialize<StartGameMessage>(root.GetRawText());
                     case "GameStateUpdate":
                         return JsonSerializer.Deserialize<GameStateUpdate>(root.GetRawText());
+                    case "PlaceShipsMessage":
+                        return JsonSerializer.Deserialize<PlaceShipsMessage>(root.GetRawText());
+                    case "ShootMessage":
+                        return JsonSerializer.Deserialize<ShootMessage>(root.GetRawText());
                     default:
                         throw new JsonException("Unknown message type");
                 }

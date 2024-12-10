@@ -9,8 +9,6 @@ namespace TorpedoCommon.MessageTypes
 {
     public class LoginRequest : BaseMessage
     {
-        public override string Type => "LoginRequest";
-
         public LoginRequest() { }
 
         public string Username { get; set; }

@@ -8,9 +8,7 @@ namespace TorpedoCommon.MessageTypes
 {
     public class PlayerListResponse : BaseMessage
     {
-        public override string Type => "PlayerListResponse";
-
-        public PlayerListResponse() { }
+       public PlayerListResponse() { }
 
         public List<string> players { get; set; }
 

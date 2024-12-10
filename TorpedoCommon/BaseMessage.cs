@@ -9,7 +9,7 @@ namespace TorpedoCommon
 {
     public abstract class BaseMessage
     {
-        public abstract string Type { get; }
+        public string Type => GetType().Name;
 
         public BaseMessage() { }
 

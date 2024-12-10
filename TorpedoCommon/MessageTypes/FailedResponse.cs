@@ -8,8 +8,6 @@ namespace TorpedoCommon.MessageTypes
 {
     public class FailedResponse : BaseMessage
     {
-        public override string Type => "FailedResponse";
-
         public FailedResponse() { }
 
         public string Message { get; set; }

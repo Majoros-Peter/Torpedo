@@ -45,13 +45,48 @@ namespace TorpedoBackend.Controllers
                                 case "StartGameMessage":
                                     StartGameMessage startGameMessage = message as StartGameMessage;
 
-                                    Game game = new Game() { Id = random.Next(),
+                                    Game newGame = new Game() { Id = random.Next(),
                                         Player1Name = players.Where(pair => pair.Value == websocket).First().Key,
                                         Player2Name = startGameMessage.Player2Name };
-                                    games.Add(game);
+                                    games.Add(newGame);
 
-                                    await SendMessage(players[game.Player1Name], new GameStateUpdate() { GameState = game });
-                                    await SendMessage(players[game.Player2Name], new GameStateUpdate() { GameState = game });
+                                    await SendToPlayers(newGame, new GameStateUpdate() { GameState = newGame });
+                                    break;
+                                case "PlaceShipsMessage":
+                                    PlaceShipsMessage placeShipsMessage = message as PlaceShipsMessage;
+                                    Game placeShipsGame = games.Find(x => x.Id == placeShipsMessage.GameId)!;
+
+                                    if (placeShipsGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key)
+                                    {
+                                        placeShipsGame.Player1Ships = placeShipsMessage.Ships;
+                                    }
+                                    else
+                                    {
+                                        placeShipsGame.Player2Ships = placeShipsMessage.Ships;
+                                    }
+
+
+                                    if (placeShipsGame.Player1Ships != null && placeShipsGame.Player2Ships.Count != null)
+                                    {
+                                        placeShipsGame.SetupPhase = false;
+                                        await SendToPlayers(placeShipsGame, new GameStateUpdate { GameState = placeShipsGame });
+                                    }
+                                    break;
+                                case "ShootMessage":
+                                    ShootMessage shootMessage = message as ShootMessage;
+                                    Game shootGame = games.Find(x => x.Id == shootMessage.GameId)!;
+
+                                    if (shootGame.Player1Name == players.Where(pair => pair.Value == websocket).First().Key)
+                                    {
+                                        shootGame.Player1Shots[shootMessage.X * 1 + shootMessage.Y] = true;
+                                        shootGame.isPlayer1Next = false;
+                                    }
+                                    else {
+                                        shootGame.Player2Shots[shootMessage.X * 1 + shootMessage.Y] = true;
+                                        shootGame.isPlayer1Next = true;
+                                    }
+                                    
+                                    await SendToPlayers(shootGame, new GameStateUpdate { GameState = shootGame });
                                     break;
                                 default:
                                     break;
@@ -79,6 +114,12 @@ namespace TorpedoBackend.Controllers
             {
                 await SendMessage(socket, message);
             }
+        }
+
+        static async Task SendToPlayers(Game game, BaseMessage message)
+        {
+            await SendMessage(players[game.Player1Name], message);
+            await SendMessage(players[game.Player2Name], message);
         }
     }
 }
