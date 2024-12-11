@@ -24,7 +24,7 @@ namespace TorpedoClient
         public async Task Connect(string username)
         {
             client = new();
-            await client.ConnectAsync(new Uri("ws://localhost:5000"), CancellationToken.None);
+            await client.ConnectAsync(new Uri("ws://localhost:5118"), CancellationToken.None);
             this.Username = username;
             await SendMessage(new LoginRequest() { Username = username });
             RecieveMessages();

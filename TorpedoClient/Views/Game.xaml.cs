@@ -132,18 +132,24 @@ namespace TorpedoClient.Views
             int column = (int)(position.X / (grid.ActualWidth / 10)); // 10 columns
 
             // Check if the ship can be placed at the current position
-            if (CanPlaceShip(row, column))
-            {
                 // Rotate the ship
                 _isVerticalPlacement = !_isVerticalPlacement;
                 RotationLabel.Content = $"Current Orientation: {(_isVerticalPlacement ? "Vertical" : "Horizontal")}";
 
+            if (CanPlaceShip(row, column))
+            {
                 // Highlight the valid placement for the ship after rotation
                 HighlightCells(row, column, Brushes.Green);
 
                 // Optionally, place the ship after rotation if it fits
                 // PlaceShip(row, column, _selectedShip); // Uncomment this if you want to auto-place after rotation
+
             }
+            else
+            {
+                HighlightCells(row, column, Brushes.Red);
+            }
+
         }
 
         // Handle mouse move to show valid/invalid placement for ship
@@ -281,7 +287,8 @@ namespace TorpedoClient.Views
 
         private bool CanPlaceShip(int row, int column)
         {
-            int shipLength = ShipLength[_selectedShip];
+            int shipLength = ShipLength[_selectedShip!];
+
             // Ensure that the ship fits in the grid without going off the edges
             if ((_isVerticalPlacement ? row + shipLength : column + shipLength) > 10) return false;
 
@@ -295,7 +302,20 @@ namespace TorpedoClient.Views
                 {
                     return false;
                 }
+
+                // Check surrounding cells to ensure they're not occupied
+                for (int r = checkRow - 1; r <= checkRow + 1; r++)
+                {
+                    for (int c = checkColumn - 1; c <= checkColumn + 1; c++)
+                    {
+                        if (r >= 0 && r < 10 && c >= 0 && c < 10 && _gridState[r, c] != 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
             }
+
             return true;
         }
 
